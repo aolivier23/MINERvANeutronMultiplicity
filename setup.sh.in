@@ -1,0 +1,33 @@
+#Set up to build standalone MINERvA macros with CMake.
+#Pass -d on the command line to find debug builds.
+
+BUILD_TYPE="opt"
+if [ "$1" = "-d" ]
+then
+  echo "Setting up in debug mode"
+  #BUILD_TYPE="debug"
+  source ~/app/root/debug/bin/thisroot.sh
+elif [ "$1" = "-p" ]
+then
+  echo "Setting up in profiling mode"
+  #BUILD_TYPE="prof"
+  source ~/app/root/debug/bin/thisroot.sh #TODO: Do I really want to profile with ROOT in debug mode?
+  #source ~/app/root/prof/bin/thisroot.sh #TODO: Does ROOT have a profiling setup?
+fi
+
+PACKAGES="PlotUtils NucCCNeutrons MnvFormat UnfoldUtils"
+for PACKAGE in ${PACKAGES}
+do
+  if [ -e "@CMAKE_INSTALL_PREFIX@/bin/setup_${PACKAGE}.sh" ]
+  then
+    source "@CMAKE_INSTALL_PREFIX@/bin/setup_${PACKAGE}.sh"
+  else
+    echo "${PACKAGE} doesn't have a @CMAKE_INSTALL_PREFIX@/bin/setup_${PACKAGE}.sh.  Not setting it up!"
+  fi
+  #TODO: else put package on LD_LIBRARY_PATH and PATH?  I'm looking at you yaml-cpp.
+
+  export ${PACKAGE}_DIR="@CMAKE_INSTALL_PREFIX@" #TODO: Do I need a separate env variable for each package anymore?
+done
+
+export MPARAMFILESROOT=@CMAKE_INSTALL_PREFIX@/../src/MParamFiles
+export MPARAMFILES=@CMAKE_INSTALL_PREFIX@/../src/MParamFiles/data
