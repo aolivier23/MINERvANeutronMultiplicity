@@ -12,7 +12,8 @@ Installation and development workflow for [NucCCNeutrons](https://github.com/Min
 4. ````export CXX=`which g++ && export CC=`which gcc` #For compatibility with Fermilab UPS on SL7````
 5. `cmake ../../src -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DCMAKE_BUILD_TYPE=Release #Generate installation instructions with CMake`
 6. Get a Fermilab Kerberos ticket.  Needed to download PlotUtils and UnfoldUtils as long as they come from the MINERvA CVS repository.
-7. `make install #Also checks out source code for dependencies.  Add -j 8 to use 8 cores for example.`
+7. Set up ROOT.  I do this automatically in my .bashrc on my personal workstation.  If you're installing on one of MINERvA's GPVMs at Fermilab, src/setupOnGPVMs.sh may help.
+8. `make install #Also checks out source code for dependencies.  Add -j 8 to use 8 cores for example.`
 
 ##Usage
 
