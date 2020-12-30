@@ -9,9 +9,10 @@ Installation and development workflow for [NucCCNeutrons](https://github.com/Min
 1. `mkdir MINERvANeutronMultiplicity && cd MINERvANeutronMultiplicity`
 2. `git clone https://github.com/aolivier23/MINERvANeutronMultiplicity.git src`
 3. `mkdir opt && cd opt && mkdir build && cd build #Make a location for an out of source build.`
-4. `cmake ../../src -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DCMAKE_BUILD_TYPE=Release #Generate installation instructions with CMake`
-5. Get a Fermilab Kerberos ticket.  Needed to download PlotUtils and UnfoldUtils as long as they come from the MINERvA CVS repository.
-6. `make install #Also checks out source code for dependencies.  Add -j 8 to use 8 cores for example.`
+4. ````export CXX=`which g++ && export CC=`which gcc` #For compatibility with Fermilab UPS on SL7````
+5. `cmake ../../src -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DCMAKE_BUILD_TYPE=Release #Generate installation instructions with CMake`
+6. Get a Fermilab Kerberos ticket.  Needed to download PlotUtils and UnfoldUtils as long as they come from the MINERvA CVS repository.
+7. `make install #Also checks out source code for dependencies.  Add -j 8 to use 8 cores for example.`
 
 ##Usage
 
@@ -27,6 +28,4 @@ Installation and development workflow for [NucCCNeutrons](https://github.com/Min
 - You don't have to call your install type `opt`.  One advantage of this workflow (and out of source builds in general) is that I can have multiple build types.  These packages are set up to support 3 build types as of writing: opt(imizied), debug, and prof(iling).  So, I like to replace `opt` with `debug` in the Installation instructions and pass `-DCMAKE_BUILD_TYPE=Debug` to create a build of the entire project that provides maximal information for gdb and valgrind.
 - If you add anything that depends on one of these ExternalProjects, it must also be an ExternalProject in its own repository.  As of CMake 2.8.12, the lowest common denominator with Scientific Linux 7, it's very hard to have a regular target depend on an ExternalProject.  I'm letting ROOT be an exception to this rule because I have never needed to develop it in parallel with my analysis.
 - Parallel builds of PlotUtils don't work on SL7 but do work on Ubuntu 18.04.  I don't yet understand why.
-- When I set up gcc using UPS at Fermilab, CMake doesn't find the newer gcc version for some reason.  I can tell CMake about it manually by modifying step 4. like this:
-```CXX=`which g++` CC=`which gcc` cmake ../../src -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DCMAKE_BUILD_TYPE=Release```
 - Please send questions and report bugs to Andrew Olivier at the University of Rochester
