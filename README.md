@@ -8,7 +8,7 @@ Installation and development workflow for [NucCCNeutrons](https://github.com/Min
 2. `git clone https://github.com/aolivier23/MINERvANeutronMultiplicity.git src`
 3. `mkdir opt && cd opt && mkdir build && cd build #Make a location for an out of source build.`
 4. Set up ROOT.  I do this automatically in my .bashrc on my personal workstation.  If you're installing on one of MINERvA's GPVMs at Fermilab, `source src/setupOnGPVMs.sh` may help.
-5. `cmake ../../src -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DCMAKE_BUILD_TYPE=Release #Generate installation instructions with CMake`
+5. ```cmake ../../src -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DCMAKE_BUILD_TYPE=Release #Generate installation instructions with CMake```
 6. `make install #Also checks out source code for dependencies.  Add -j 8 to use 8 cores for example.`
 
 ## Usage
