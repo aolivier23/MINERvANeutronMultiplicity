@@ -1,0 +1,56 @@
+#!/usr/bin/env MnvFormat
+style: &standardStyle
+  stats: 0
+  line:
+    width: 3
+    style: 1
+  label:
+    size: 0.04
+  title:
+    size: 0.08
+  fill:
+    style: 0
+
+narrowLegend: &leftLegend
+  x1: 0.1
+  x2: 0.4
+  y1: 0.5
+  y2: 0.9
+  size: 0.04
+
+narrowRightLegend: &rightLegend
+  x1: 0.6
+  x2: 0.9
+  y1: 0.5
+  y2: 0.9
+  size: 0.04
+
+favoriteOption: &favoriteOption
+  "HISTCOLZTEXT"
+
+canvases:
+  "Migration_AreaNorm.png":
+    title: "Area-Normalized Migration Matrix"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: &matrixName "Neutron_Multiplicity_Migration"
+        option: *favoriteOption
+        norm: "area"
+  "Migration_RowNorm.png":
+    title: "Row-Normalized Migration Matrix"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: *matrixName
+        option: *favoriteOption
+        norm: "row"
+    max: 0.8
+  "Migration_ColNorm.png":
+    title: "Column-Normalized Migration Matrix"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: *matrixName
+        option: *favoriteOption
+        norm: "column"

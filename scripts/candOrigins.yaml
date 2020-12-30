@@ -1,0 +1,70 @@
+#!/usr/bin/env MnvFormat
+style: &standardStyle
+  stats: 0
+  line:
+    width: 3
+    style: 1
+  label:
+    size: 0.04
+  title:
+    size: 0.08
+  fill:
+    style: 0
+
+legend: &edepLegend
+  x1: 0.45
+  x2: 0.95
+  y1: 0.5
+  y2: 0.9
+  size: 0.04
+
+narrowLegend: &narrowLegend
+  x1: 0.1
+  x2: 0.4
+  y1: 0.5
+  y2: 0.9
+  size: 0.04
+
+narrowRightLegend: &narrowRightLegend
+  x1: 0.6
+  x2: 0.9
+  y1: 0.5
+  y2: 0.9
+  size: 0.04
+
+favoriteOption: &favoriteOption
+  "HIST"
+
+canvases:
+  "edepByOrigin.png":
+    title: "Candidate Energy Deposits"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: "Neutron_Detection__(.*)EDeps"
+        option: *favoriteOption
+    legend: *edepLegend
+  "angleByOrigin.png":
+    title: "Candidate Angles w.r.t. the Z Axis"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: "Neutron_Detection__(.*)Angles"
+        option: *favoriteOption
+    legend: *narrowLegend
+  "betaByOrigin.png":
+    title: "Candidate $Beta"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: "Neutron_Detection__(.*)#beta"
+        option: *favoriteOption
+    legend: *narrowLegend
+  "zDistByOrigin.png":
+    title: "Candidate Z Distance from the Vertex"
+    style: *standardStyle
+    patterns:
+      - files: "(.*)\\.root"
+        hists: "Neutron_Detection__(.*)ZDistFromVertex"
+        option: *favoriteOption
+    legend: *edepLegend

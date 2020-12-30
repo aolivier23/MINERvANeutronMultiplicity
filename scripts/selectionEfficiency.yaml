@@ -1,0 +1,75 @@
+#!/usr/bin/env MnvFormat
+style: &standardStyle
+  stats: 0
+  line:
+    width: 3
+    style: 1
+  label:
+    size: 0.04
+  title:
+    size: 0.08
+  fill:
+    style: 0
+
+numeratorName: &numName "Neutron_Multiplicity_EfficiencyNumerator"
+denominatorName: &denName "Neutron_Multiplicity_EfficiencyDenominator"
+rightLegend: &rightLegend
+  x1: 0.4
+  x2: 0.9
+  y1: 0.6
+  y2: 0.9
+  size: 0.04
+
+canvases:
+  "SelectionEfficiencyScan.png":
+    title: "Efficiency in Number of Neutrons"
+    style: *standardStyle
+    patterns:
+      - files: "NeutronMultiplicityTracker_(.*)AvailableMC\\.root"
+        hists: *numName
+        denominator: *denName
+        prefix: "$1 E_{available} Cut"
+        postfix: ""
+        option: "HIST"
+    max: 1.5
+    legend: *rightLegend
+  "EfficiencyNumeratorScan.png":
+    title: "Efficiency Numerator in Number of Neutrons"
+    style: *standardStyle
+    patterns:
+      - files: "NeutronMultiplicityTracker_(.*)AvailableMC\\.root"
+        hists: *numName
+        prefix: "$1 E_{available} Cut"
+        postfix: ""
+        option: "HIST"
+    max: &efficiencyComponentMax 450000
+    legend: *rightLegend
+  "EfficiencyDenominatorScan.png":
+    title: "Efficiency Denominator in Number of Neutrons"
+    style: *standardStyle
+    patterns:
+      - files: "NeutronMultiplicityTracker_(.*)AvailableMC\\.root"
+        hists: *denName
+        prefix: "$1 E_{available} Cut"
+        postfix: ""
+        option: "HIST"
+    max: *efficiencyComponentMax
+    legend: *rightLegend
+  "ODCutComparison.png":
+    title: "Efficiency with E_{available} < 100 MeV"
+    style: *standardStyle
+    patterns:
+      - files: "NeutronMultiplicityTracker_100MeVAvailableMC\\.root"
+        hists: *numName
+        denominator: *denName
+        prefix: "Allow OD Energy"
+        postfix: ""
+        option: "HIST"
+      - files: "NeutronMultiplicityTracker_NoODEnergyMC\\.root"
+        hists: *numName
+        denominator: *denName
+        prefix: "No OD Energy"
+        postfix: ""
+        option: "HIST"
+    max: 1.2
+    legend: *rightLegend
