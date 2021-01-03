@@ -31,6 +31,9 @@ ExternalProject_Add(MParamFiles
                     INSTALL_COMMAND ""
                     )
 
+#Put MParamFiles into the directory structure
+install(DIRECTORY MParamFiles DESTINATION etc)
+
 #Third-party dependencies.
 #TODO: Make my own tarball of this as a backup plan?  Think of the nightmare that was v22r1p1 :(
 ExternalProject_Add(yaml-cpp

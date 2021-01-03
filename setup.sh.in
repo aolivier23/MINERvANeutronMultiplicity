@@ -1,6 +1,8 @@
 #Set up to build standalone MINERvA macros with CMake.
 #Pass -d on the command line to find debug builds.
 
+PREFIX=${MINERVA_PREFIX:-"@CMAKE_INSTALL_PREFIX@"}
+
 BUILD_TYPE="opt"
 if [ "$1" = "-d" ]
 then
@@ -18,16 +20,16 @@ fi
 PACKAGES="PlotUtils NucCCNeutrons MnvFormat UnfoldUtils"
 for PACKAGE in ${PACKAGES}
 do
-  if [ -e "@CMAKE_INSTALL_PREFIX@/bin/setup_${PACKAGE}.sh" ]
+  if [ -e "${PREFIX}/bin/setup_${PACKAGE}.sh" ]
   then
-    source "@CMAKE_INSTALL_PREFIX@/bin/setup_${PACKAGE}.sh"
+    source "${PREFIX}/bin/setup_${PACKAGE}.sh"
   else
-    echo "${PACKAGE} doesn't have a @CMAKE_INSTALL_PREFIX@/bin/setup_${PACKAGE}.sh.  Not setting it up!"
+    echo "${PACKAGE} doesn't have a ${PREFIX}/bin/setup_${PACKAGE}.sh.  Not setting it up!"
   fi
   #TODO: else put package on LD_LIBRARY_PATH and PATH?  I'm looking at you yaml-cpp.
 
-  export ${PACKAGE}_DIR="@CMAKE_INSTALL_PREFIX@" #TODO: Do I need a separate env variable for each package anymore?
+  export ${PACKAGE}_DIR="${PREFIX}" #TODO: Do I need a separate env variable for each package anymore?
 done
 
-export MPARAMFILESROOT=@CMAKE_INSTALL_PREFIX@/../src/MParamFiles
-export MPARAMFILES=@CMAKE_INSTALL_PREFIX@/../src/MParamFiles/data
+export MPARAMFILESROOT=${PREFIX}/etc/MParamFiles
+export MPARAMFILES=${PREFIX}/etc/MParamFiles/data
