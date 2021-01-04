@@ -1,6 +1,8 @@
 #One CMakeLists.txt to rule them all.  One CMakeLists.txt to find them.  One CMakeLists.txt to bring them all and in ${BUILD_TYPE} bind them.
 cmake_minimum_required(VERSION 2.8.12)
 
+project(MINERvANeutronMultiplicity)
+
 include(ExternalProject)
 
 #TODO: Don't delete SOURCE_DIR's contents.  Let me manage it manually or cvs update -A if I have to.
