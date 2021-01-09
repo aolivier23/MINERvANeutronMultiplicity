@@ -1,0 +1,3 @@
+configure_file(runWarping.sh.in runWarping.sh @ONLY)
+
+install(FILES runWarping.make ${CMAKE_CURRENT_BINARY_DIR}/runWarping.sh runTransWarp.sh DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

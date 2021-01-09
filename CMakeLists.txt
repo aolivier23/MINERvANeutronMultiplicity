@@ -60,3 +60,5 @@ ExternalProject_Add(NucCCNeutrons
 configure_file(setup.sh.in setup.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh DESTINATION bin)
 install(FILES setupOnGPVMs.sh DESTINATION bin)
+
+add_subdirectory(scripts)

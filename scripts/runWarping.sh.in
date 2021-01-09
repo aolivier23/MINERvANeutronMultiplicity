@@ -1,0 +1,5 @@
+#!/bin/bash
+
+PREFIX=${MINERVA_PREFIX:-"@CMAKE_INSTALL_PREFIX@"}
+
+ANALYSIS=$1 make -f ${PREFIX}/bin/runWarping.make --ignore-errors -j ${2:-`nproc`}
