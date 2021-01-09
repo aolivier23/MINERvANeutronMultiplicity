@@ -17,8 +17,8 @@ ITER_TO_TEST:= 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
 RECO_HIST:=Tracker_Neutron_Multiplicity_SelectedMCEvents
 TRUE_HIST:=Tracker_Neutron_Multiplicity_EfficiencyNumerator
 
-results/combined.csv: results
-	cat results/Warping*.csv > results/combined.csv
+results/$(WARPED_NAME)_combined.csv: results
+	cat results/Warping_$(WARPED_NAME)MC_*.csv > $@
 
 results: transWarp
 	mkdir -p results && cd results $(foreach STUDY,$(wildcard transWarp/*.root),&& root -l -b -q '~/app/MINERvANeutronMultiplicity/src/scripts/warpingTable.cpp("../$(STUDY)")')
