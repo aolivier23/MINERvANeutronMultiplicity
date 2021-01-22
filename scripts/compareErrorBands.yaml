@@ -1,0 +1,43 @@
+#!/usr/bin/env MnvFormat
+style: &standardStyle
+  stats: 0
+  line:
+    width: 3
+    style: 1
+  label:
+    size: 0.04
+  title:
+    size: 0.08
+  fill:
+    style: 0
+
+narrowLegend: &leftLegend
+  x1: 0.1
+  x2: 0.4
+  y1: 0.5
+  y2: 0.9
+  size: 0.04
+
+rightLegend: &rightLegend
+  x1: 0.4
+  x2: 0.9
+  y1: 0.7
+  y2: 0.9
+  size: 0.04
+
+canvases:
+  "MC_Selected.png":
+    title: "MC Selected"
+    style: *standardStyle
+    patterns:
+      - files: "NeutronMultiplicity_smallApothemAndEAvailMC\\.root"
+        hists: &histName "Tracker_Neutron_Multiplicity_SelectedMCEvents"
+        prefix: "MnvTunev1"
+        postfix: ""
+        option: "HIST"
+      - files: "NeutronMultiplicity_smallApothemAndEAvailMC_([^_]+)_([[:digit:]]).root"
+        hists: *histName
+        prefix: "$1 band $2"
+        postfix: ""
+        option: "HIST"
+    legend: *rightLegend
