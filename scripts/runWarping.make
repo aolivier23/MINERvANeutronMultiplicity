@@ -3,7 +3,7 @@
 #--ignore-errors helps if madd is crashing at the end of the job.
 #USAGE: ANALYSIS=someFile.yaml make -f runWarping.make -j nproc
 
-TUPLE_DIR="/media/anaTuples/validateSL7"
+TUPLE_DIR="/media/anaTuples/validateSL7/antineutrino"
 PLAYLISTS:= $(shell ls $(TUPLE_DIR))
 CV_NAME:=$(shell basename $(ANALYSIS) .yaml)_cv
 CV_FILES:=$(foreach DIR,$(PLAYLISTS),$(DIR)/$(CV_NAME)MC.root)
@@ -16,6 +16,10 @@ MIGRATION_FILE:=$(CV_NAME)MC.root
 ITER_TO_TEST:= 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,40,50,60,70,80,90,100
 RECO_HIST:=Tracker_Neutron_Multiplicity_SelectedMCEvents
 TRUE_HIST:=Tracker_Neutron_Multiplicity_EfficiencyNumerator
+
+.PHONY: notify
+notify: results/$(WARPED_NAME)_combined.csv
+	notify-send -t 0 "Warping study for $(ANALYSIS) complete"
 
 results/$(WARPED_NAME)_combined.csv: results
 	cat results/Warping_$(WARPED_NAME)MC_*.csv > $@
