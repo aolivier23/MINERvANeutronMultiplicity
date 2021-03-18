@@ -72,7 +72,7 @@ int dataMCRatio(const std::string& dataFileName, const std::string& mcFileName)
   auto dataFile = giveMeFileOrGiveMeDeath(dataFileName),
        mcFile   = giveMeFileOrGiveMeDeath(mcFileName);
 
-  const std::string var = "EDeps", anaName = "Neutron_Detection",
+  const std::string var = "EDeps", anaName = "Tracker_Neutron_Detection",
                     dataName = anaName + "_Data" + var;
   const std::regex find(anaName + R"(__(.*))" + var);
 

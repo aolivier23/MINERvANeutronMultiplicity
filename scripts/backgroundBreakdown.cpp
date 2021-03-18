@@ -68,7 +68,7 @@ void applyColors(TList& hists, const std::vector<int>& colors)
   {
     auto& hist = dynamic_cast<TH1&>(*hists.At(whichHist));
     hist.SetLineColor(colors.at(whichHist));
-    hist.SetLineWidth(lineSize);
+    hist.SetLineWidth(0); //Took this out because line widths were making it look like top histogram has contributions when it has none.
     hist.SetFillColor(colors.at(whichHist)); //Use only without nostack (Yes, that's a double negative)
   }
 }
@@ -151,7 +151,6 @@ int backgroundBreakdown(const std::string& dataFileName, const std::string& mcFi
   auto mcTotal = static_cast<TH1*>(mcStack.GetStack()->Last());
   mcTotal->SetTitle("MnvTunev1");
 
-  //mcTotal->GetYaxis()->SetTitle("candidates / event"); //dataWithStatErr->GetYaxis()->GetTitle()); //TODO: I had the axes backwards in the original plo
   mcTotal->GetYaxis()->SetLabelSize(labelSize * (bottomFraction + margin));
   mcTotal->GetYaxis()->SetTitleSize(0.06); //TODO: How to guess what these are?
   mcTotal->GetYaxis()->SetTitleOffset(0.6);
@@ -191,19 +190,21 @@ int backgroundBreakdown(const std::string& dataFileName, const std::string& mcFi
   bottom.SetTopMargin(0);
   bottom.SetBottomMargin(0.3);
   auto ratio = static_cast<PlotUtils::MnvH1D*>(dataHist->Clone()),
-       mcRatio = std::accumulate(stackHists.begin()+1, stackHists.end(), static_cast<PlotUtils::MnvH1D*>(stackHists.front()->Clone()),
-                                 [dataPOT, mcPOT](auto sum, const PlotUtils::MnvH1D* hist)
-                                 {
-                                   sum->Add(hist);
-                                   return sum;
-                                 });
-  ratio->Divide(ratio, mcRatio);
+       mcTotalWithSys = std::accumulate(stackHists.begin()+1, stackHists.end(), static_cast<PlotUtils::MnvH1D*>(stackHists.front()->Clone()),
+                                        [dataPOT, mcPOT](auto sum, const PlotUtils::MnvH1D* hist)
+                                        {
+                                          sum->Add(hist);
+                                          return sum;
+                                        });
+  ratio->Divide(ratio, mcTotalWithSys); //This is what MnvPlotter does too: Divide() MnvH1Ds directly.
+
 
   //Now fill mcRatio with 1 for bin content and fractional error
-  for(int whichBin = 0; whichBin <= mcRatio->GetXaxis()->GetNbins(); ++whichBin)
+  auto mcRatio = mcTotalWithSys->GetTotalError(false, true, false); //The second "true" makes this fractional error.
+  for(int whichBin = 0; whichBin <= mcRatio.GetXaxis()->GetNbins(); ++whichBin)
   {
-    mcRatio->SetBinError(whichBin, mcRatio->GetBinError(whichBin)/mcRatio->GetBinContent(whichBin));
-    mcRatio->SetBinContent(whichBin, 1);
+    mcRatio.SetBinError(whichBin, std::max(mcRatio.GetBinContent(whichBin), 1e-9)); //TH1::Draw() behaves very badly when errors are exactly 0, so set them to a very small value instead.
+    mcRatio.SetBinContent(whichBin, 1);
   }
 
   ratio->SetTitle("");
@@ -219,23 +220,22 @@ int backgroundBreakdown(const std::string& dataFileName, const std::string& mcFi
 
   ratio->GetXaxis()->SetTitleSize(0.16);
   ratio->GetXaxis()->SetTitleOffset(0.9);
-  //ratio->GetXaxis()->SetTitle("energy deposits [MeV]"); //dataWithStatErr->GetXaxis()->GetTitle()); //TODO: I had the axes backwards in the original plot
   ratio->GetXaxis()->SetLabelSize(labelSize);
 
   /*ratio->SetMinimum(minRatio);
   ratio->SetMaximum(maxRatio);*/
-  ratio->Draw();
+  ratio->Draw(); //Nota Bene: Only draws statistical error bars on the ratio.
+                 //           The systematic errors are not part of the sumw2, and we do not override GetBinError().
 
-  mcRatio->SetLineColor(kRed);
-  mcRatio->SetLineWidth(lineSize);
-  mcRatio->SetFillColorAlpha(kPink + 1, 0.4);
-  mcRatio->Draw("E2SAME");
+  mcRatio.SetLineColor(kRed);
+  mcRatio.SetLineWidth(lineSize);
+  mcRatio.SetFillColorAlpha(kPink + 1, 0.4);
+  mcRatio.Draw("E2 SAME");
 
   //Draw a flat line through the center of the MC
-  auto straightLine = static_cast<TH1*>(mcRatio->Clone());
+  auto straightLine = static_cast<TH1*>(mcRatio.Clone());
   straightLine->SetFillStyle(0);
   straightLine->Draw("HISTSAME");
-  //TODO: Do uncertainty propagation correctly.  Looks like I'm assuming data and MC are uncorrelated for now which is roughly true.
 
   //Title for the whole plot
   top.cd();
