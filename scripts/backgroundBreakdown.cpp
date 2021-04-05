@@ -82,6 +82,8 @@ int backgroundBreakdown(const std::string& dataFileName, const std::string& mcFi
   auto dataFile = giveMeFileOrGiveMeDeath(dataFileName),
        mcFile   = giveMeFileOrGiveMeDeath(mcFileName);
 
+  mcFile->GetListOfKeys()->Sort();
+
   const std::string fiducialName = "Tracker",
                     dataName = fiducialName + "_" + sidebandName + "_" + (isSelected?"Signal":"Data"),
                     mcSignalName = fiducialName + "_"  + sidebandName + "_" + (isSelected?"SelectedMCEvents":"TruthSignal");
